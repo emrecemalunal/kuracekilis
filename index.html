@@ -3,109 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Küre Çekiliş (50 Top) — Tek Dosya</title>
+  <title>Küre Çekiliş (EuroJackpot tarzı)</title>
   <style>
-    :root {
-      --bg1: #f8fafc;
-      --bg2: #e2e8f0;
-      --ink: #0f172a;
-      --muted: #475569;
-    }
-    html, body {
-      margin: 0;
-      height: 100%;
-      background: linear-gradient(180deg, var(--bg1), var(--bg2));
-      color: var(--ink);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    }
-    .wrap {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 24px;
-    }
-    h1 {
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .muted { color: var(--muted); }
-    .controls {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    button {
-      appearance: none;
-      border: none;
-      background: #0b0b0c;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 999px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:disabled { opacity: 0.6; cursor: default; }
-    .pill {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: white;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      font-size: 14px;
-    }
-    .board {
-      position: relative;
-      width: 520px;
-      height: 520px;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 8px 40px rgba(2,8,23,0.18);
-      border: 1px solid #e2e8f0;
-      overflow: hidden;
-    }
-    .glass {
-      pointer-events: none;
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background:
-        radial-gradient(900px 400px at 0% 0%, rgba(255,255,255,0.6), rgba(255,255,255,0) 45%),
-        radial-gradient(500px 300px at 100% 100%, rgba(0,0,0,0.08), rgba(0,0,0,0) 55%);
-    }
-    .hole {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: -12px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #0f172a;
-      color: white;
-      font-size: 10px;
-      display: grid;
-      place-items: center;
-      user-select: none;
-    }
-    canvas { display: block; }
-    .hint {
-      font-size: 13px;
-      color: var(--muted);
-      max-width: 720px;
-      line-height: 1.6;
-    }
+    :root { --bg1:#f8fafc; --bg2:#e2e8f0; --ink:#0f172a; --muted:#475569; }
+    html,body{margin:0;height:100%;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--ink);
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px}
+    h1{margin:0;font-weight:800;letter-spacing:-.02em}
+    .muted{color:var(--muted)}
+    .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    button{appearance:none;border:none;background:#0b0b0c;color:#fff;padding:10px 16px;border-radius:999px;
+      box-shadow:0 4px 16px rgba(0,0,0,.15);cursor:pointer;font-weight:700}
+    button:disabled{opacity:.6;cursor:default}
+    .pill{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);font-size:14px}
+    .board{position:relative;width:520px;height:520px;border-radius:50%;background:#fff;
+      box-shadow:0 8px 40px rgba(2,8,23,.18);border:1px solid #e2e8f0;overflow:hidden}
+    .glass{pointer-events:none;position:absolute;inset:0;border-radius:50%;
+      background:radial-gradient(900px 400px at 0% 0%,rgba(255,255,255,.6),transparent 45%),
+                 radial-gradient(500px 300px at 100% 100%,rgba(0,0,0,.08),transparent 55%)}
+    .hole{position:absolute;left:50%;transform:translateX(-50%);bottom:-12px;width:32px;height:32px;border-radius:50%;
+      background:#0f172a;color:#fff;font-size:10px;display:grid;place-items:center;user-select:none}
+    canvas{display:block}
+    .hint{font-size:13px;color:var(--muted);max-width:720px;line-height:1.6}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div>
       <h1>Küre Çekiliş Simülatörü</h1>
-      <div class="muted">50 top • 5 saniye karıştır • yalnızca 1 top deliğe düşsün</div>
+      <div class="muted">EuroJackpot tarzı: tüm toplar dipte → 8 sn alttan güçlü üfleme → 1 top delikten düşsün</div>
     </div>
     <div class="controls">
       <button id="startBtn">Karıştır & Çek</button>
@@ -117,19 +44,27 @@
       <div class="glass"></div>
     </div>
     <p class="hint">
-      Adil rastgelelik: Karıştırma bittiğinde kazanan top, 1–50 arasında <em>uniform</em> olarak seçilir. Delik çapı yalnızca bir topun sığacağı şekilde ayarlanmıştır.
+      Not: Karıştırma süresi <b>8 saniye</b>. Üfleme alanı kürenin alt merkezinden yukarı doğru itiş + hafif türbülans uygular.
+      Süre bittiğinde kazanan top 1–50 arasında <em>uniform</em> rastgele seçilir ve deliğe yönlendirilir.
     </p>
   </div>
 
   <script>
   (function(){
-    const MIX_MS = 5000;
+    // ---- Parametreler (EuroJackpot tarzı) ----
+    const MIX_MS = 8000;                 // 8 saniye karıştırma
     const BALL_COUNT = 50;
-    const W = 520;
-    const H = 520;
+    const W = 520, H = 520;
     const BALL_DIAM = 28;
-    const R = (W - BALL_DIAM) / 2; // top merkezlerinin dairesi (sınır)
-    const HOLE_CENTER = { x: W/2, y: H - BALL_DIAM/2 }; // alt-orta
+    const R = (W - BALL_DIAM) / 2;       // top merkezlerinin maksimum yarıçapı
+    const HOLE_CENTER = { x: W/2, y: H - BALL_DIAM/2 }; // alt-orta delik
+    const FAN_POS = { x: W/2, y: H - 10 }; // üfleme ağzı (kürenin altı)
+    const FAN_STRENGTH = 900;            // ana üfleme gücü (px/s^2)
+    const FAN_SPREAD = 170;              // üfleme etkisinin yatay yayılımı (px)
+    const DRAG = 0.995;                  // hava sürtünmesi
+    const TURB = 140;                    // türbülans maksimum katkı (px/s^2)
+    const BOUNCE_DAMP = 0.96;            // çarpma sonrası hız sönüm
+    // ------------------------------------------
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -146,30 +81,18 @@
     let startTime = 0;
     let seed = Math.floor(Math.random() * 1e9) >>> 0;
 
-    function rngNext() {
-      // Basit LCG (deterministik rastgelelik)
-      seed = (1664525 * seed + 1013904223) >>> 0;
-      return seed / 0xffffffff;
-    }
+    function rngNext(){ seed = (1664525*seed + 1013904223) >>> 0; return seed/0xffffffff; }
 
-    function initState() {
-      positions = Array.from({length: BALL_COUNT}, () => {
-        // daire içinde rastgele konum
-        for (let k=0;k<999;k++){
-          const rx = (rngNext()*2 - 1) * R;
-          const ry = (rngNext()*2 - 1) * R;
-          if (rx*rx + ry*ry <= R*R) {
-            return { x: rx + W/2, y: ry + H/2 };
-          }
-        }
-        return { x: W/2, y: H/2 };
+    // Başlangıç: tüm topları dipte dar bir bantta konumlandır
+    function initStateBottomCluster() {
+      positions = Array.from({length: BALL_COUNT}, (_,i) => {
+        const angleJitter = (rngNext()-0.5)*0.3;                // hafif saçılma
+        const x = W/2 + (rngNext()*2-1) * (W*0.35);             // alt taraf genişçe
+        const y = H - BALL_DIAM/2 - (rngNext()*BALL_DIAM*0.8);  // en dipte sıkışık
+        return { x, y };
       });
-      const speedMin = 60, speedMax = 140;
-      velocities = Array.from({length: BALL_COUNT}, () => {
-        const a = rngNext() * Math.PI * 2;
-        const s = speedMin + rngNext()*(speedMax-speedMin);
-        return { vx: Math.cos(a)*s, vy: Math.sin(a)*s };
-      });
+      // Yavaş başlangıç hızları (ilk itiş fan'dan gelecek)
+      velocities = Array.from({length: BALL_COUNT}, () => ({ vx:(rngNext()*2-1)*20, vy: -rngNext()*30 }));
     }
 
     function draw() {
@@ -180,78 +103,94 @@
         ctx.save();
         ctx.beginPath();
         ctx.arc(p.x+1.5, p.y+2, BALL_DIAM/2, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fill();
-        ctx.restore();
+        ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fill(); ctx.restore();
 
         const grad = ctx.createRadialGradient(p.x-6, p.y-6, 2, p.x, p.y, BALL_DIAM/2);
-        grad.addColorStop(0, '#eef2ff');
-        grad.addColorStop(1, '#c7d2fe');
+        grad.addColorStop(0, '#eef2ff'); grad.addColorStop(1, '#c7d2fe');
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, BALL_DIAM/2, 0, Math.PI*2);
-        ctx.fillStyle = grad;
-        ctx.strokeStyle = '#818cf8';
-        ctx.lineWidth = 1;
-        ctx.fill();
-        ctx.stroke();
+        ctx.fillStyle = grad; ctx.strokeStyle = '#818cf8'; ctx.lineWidth = 1; ctx.fill(); ctx.stroke();
 
-        // numara
-        ctx.fillStyle = '#0f172a';
-        ctx.font = '600 11px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#0f172a'; ctx.font = '600 11px ui-sans-serif, system-ui';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.fillText(String(i+1), p.x, p.y);
       }
     }
 
-    function step(dt) {
-      // karıştırma fazında: sınırda sekerek hareket
+    // Alttan üfleme alanı: yukarı itiş + x ekseninde merkeze doğru yumuşak yönlendirme
+    function applyFanForces(dt) {
       for (let i=0;i<BALL_COUNT;i++){
         const p = positions[i];
         const v = velocities[i];
-        p.x += v.vx*dt;
-        p.y += v.vy*dt;
 
-        const cx = p.x - W/2;
-        const cy = p.y - H/2;
+        // Yatay mesafe (fan merkezinden)
+        const dx = p.x - FAN_POS.x;
+        // Alt kısma yakınsa kuvvet daha büyük (y ile azalsın)
+        const dy = Math.max(0, FAN_POS.y - p.y + 40); // deliğe çok yakın olanlar da etkilensin
+        const horizFalloff = Math.exp(- (dx*dx) / (2*FAN_SPREAD*FAN_SPREAD));
+        const vertFalloff  = Math.min(1, dy / 200);         // dipte 1, yukarıda azalır
+
+        // Ana yukarı itiş
+        const ay = -FAN_STRENGTH * horizFalloff * vertFalloff;
+
+        // X ekseninde merkeze toparlama (hafif)
+        const ax_center = -dx * 4; // zayıf merkezleme
+
+        // Türbülans (rastgele ufak dalgalanma)
+        const ax_turb = (rngNext()*2-1) * TURB;
+        const ay_turb = (rngNext()*2-1) * TURB * 0.4;
+
+        // Toplam ivme
+        const ax = (ax_center + ax_turb) * dt;
+        const ay_total = (ay + ay_turb) * dt;
+
+        v.vx = (v.vx + ax) * DRAG;
+        v.vy = (v.vy + ay_total) * DRAG;
+      }
+    }
+
+    // Daire sınırına çarpmalar (sekmeler)
+    function integrateAndBounce(dt) {
+      for (let i=0;i<BALL_COUNT;i++){
+        const p = positions[i], v = velocities[i];
+        p.x += v.vx * dt; p.y += v.vy * dt;
+
+        const cx = p.x - W/2, cy = p.y - H/2;
         const dsq = cx*cx + cy*cy;
         if (dsq > R*R) {
-          const d = Math.sqrt(dsq) || 1;
-          const nx = cx/d, ny = cy/d;
+          const d = Math.sqrt(dsq) || 1, nx = cx/d, ny = cy/d;
           const overlap = d - R;
-          p.x -= nx*overlap;
-          p.y -= ny*overlap;
+          p.x -= nx*overlap; p.y -= ny*overlap;
           const dot = v.vx*nx + v.vy*ny;
-          v.vx -= 2*dot*nx;
-          v.vy -= 2*dot*ny;
+          v.vx = (v.vx - 2*dot*nx) * BOUNCE_DAMP;
+          v.vy = (v.vy - 2*dot*ny) * BOUNCE_DAMP;
         }
       }
     }
 
-    // Seçilen topun deliğe yaklaşması ve düşmesi
+    function stepMix(dt) {
+      applyFanForces(dt);    // alttan üfleme + türbülans
+      integrateAndBounce(dt);
+    }
+
+    // Seçilen topu deliğe indir
     function animateDrop(idx, t) {
       const p = positions[idx];
       const D1 = 0.9, D2 = 0.9; // hizalanma ve düşüş süreleri
-      const total = D1 + D2;
-      const tt = Math.min(t, total);
+      const total = D1 + D2; const tt = Math.min(t, total);
 
-      if (!animateDrop.start){
-        animateDrop.start = { x: p.x, y: p.y };
-      }
+      if (!animateDrop.start){ animateDrop.start = { x: p.x, y: p.y }; }
       const s = animateDrop.start;
 
       if (tt <= D1) {
-        // easeInOutQuad
-        const u = tt / D1;
-        const e = u < 0.5 ? 2*u*u : -1 + (4 - 2*u) * u;
+        const u = tt / D1; const e = u < 0.5 ? 2*u*u : -1 + (4-2*u)*u; // easeInOutQuad
         p.x = s.x + (HOLE_CENTER.x - s.x) * e;
         p.y = s.y + (HOLE_CENTER.y - s.y) * e;
       } else {
         p.x = HOLE_CENTER.x;
-        const u = (tt - D1) / D2;
-        const e = u*u; // easeIn
-        p.y = HOLE_CENTER.y + 140*e; // deliğin dışına doğru
+        const u = (tt - D1) / D2; const e = u*u; // easeIn
+        p.y = HOLE_CENTER.y + 140*e;
       }
       return tt >= total;
     }
@@ -262,9 +201,8 @@
       loop.prev = now;
 
       if (phase === 'mixing') {
-        step(dt);
+        stepMix(dt);
         if (now - startTime >= MIX_MS) {
-          // kazananı seç
           winnerIndex = Math.floor(rngNext() * BALL_COUNT);
           phase = 'dropping';
           holeEl.textContent = 'Çıkış';
@@ -283,9 +221,7 @@
           winnerPill.style.display = 'inline-block';
           winnerNumEl.textContent = String(winnerIndex+1);
           startBtn.disabled = false;
-          cancelAnimationFrame(raf);
-          raf = null;
-          return;
+          cancelAnimationFrame(raf); raf = null; return;
         }
       }
       raf = requestAnimationFrame(loop);
@@ -297,7 +233,7 @@
       holeEl.textContent = 'Delik';
       winnerIndex = -1;
       seed = Math.floor(Math.random() * 1e9) >>> 0;
-      initState();
+      initStateBottomCluster();          // dipte başlat
       phase = 'mixing';
       startTime = performance.now();
       loop.prev = startTime;
@@ -305,8 +241,8 @@
       raf = requestAnimationFrame(loop);
     });
 
-    // ilk çizim
-    initState();
+    // İlk görünüm: dipte kümelenmiş başlangıç
+    initStateBottomCluster();
     draw();
   })();
   </script>
